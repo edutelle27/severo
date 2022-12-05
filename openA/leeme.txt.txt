@@ -1,0 +1,4 @@
+Este fichero es de prueba, se ha creado para testear el git.
+
+Ahora lo cambio, es decir, esta modificación no está en el repositorio.
+Voy a realizar cambios para que se reflejen una vez realziado el commit

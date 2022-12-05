@@ -1,0 +1,90 @@
+<?php
+
+
+
+
+
+require('./fpdf183/fpdf.php');
+class PDF extends FPDF
+{
+// Cabecera de página
+function Header()
+{
+	// Arial bold 15
+	$this->SetFont('Arial','B',15);
+	// Movernos a la derecha
+	$this->Cell(80);
+	// Título
+	$this->Cell(30,10,'Benidorm Chess Open 2021 - Premios');
+	// Salto de línea
+	$this->Ln();
+}
+
+
+// Pie de página
+function Footer()
+{
+	// Posición: a 1,5 cm del final
+	$this->SetY(-15);
+	// Arial italic 8
+	$this->SetFont('Arial','I',8);
+	// Número de página
+	$this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
+}
+}// fin clase
+
+
+function pdf_premios()
+{
+
+  $DBHost="localhost";
+  $DBUser="root";
+  $DBPass="";
+  $DBMybda="open2400";
+
+  /* Intentamos establecer una conexión persistente con el servidor.*/
+ $id_conexion = mysqli_connect($DBHost, $DBUser, $DBPass, $DBMybda);
+ if(!$id_conexion){
+       die ("Fallo en la conexion a MySQL " . mysqli_connect_error());
+    } 
+ $sql_script = "SELECT c.idpremio,c.orden,c.idjugador,c.valor FROM cuadropremio c order by c.idpremio,c.orden asc";
+ 
+ $datos = mysqli_query($id_conexion,$sql_script) or die ("<CENTER><H2>Error al consultar la base de 
+   					datos.</H2></CENTER>");
+   					
+ $numfilas = mysqli_num_rows($datos);
+ 
+ $pdf = new PDF();
+
+
+
+
+
+ $pdf->AliasNbPages();
+ $pdf->AddPage();
+ $pdf->SetFont('Times','',12);
+ 
+ while ($mifila = mysqli_fetch_row($datos))
+
+
+
+
+   { $pdf->Cell(0,10,'Imprimiendo numero fila '.$mifila[0],0,1);}
+   
+ $pdf->Output();						          
+ 
+  if (isset($datos)) mysqli_free_result($datos);
+     /* Liberamos la conexión persistente con el servidor.*/
+  if (isset($id_conexion)) mysqli_close($id_conexion);
+  
+
+  } // fin function pdf_premios
+  
+  pdf_premios();
+  
+
+?>
+
+
+
+
